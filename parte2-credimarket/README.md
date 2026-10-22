@@ -15,12 +15,11 @@ cat .secrets/cuentas-demo.txt     # cuentas de prueba (generadas, no versionadas
 
 | Integrante | Responsabilidades principales |
 |---|---|
-| _(nombre 1)_ | Productos + Inventario + Redis |
-| _(nombre 2)_ | Clientes + seguridad + frontend |
-| _(nombre 3)_ | Préstamos + RabbitMQ (outbox, consumidores, máquina de estados) |
-| _(nombre 4)_ | Datos + modelo + MLOps (MLflow, exportación, promoción) |
+| Pedro Rueda | Productos + Inventario + Redis (caché, invalidación, mediciones) |
+| Samuel Ramírez | Clientes + seguridad (JWT, roles, importación CSV) + frontend |
+| Sebastian Pérez | Préstamos + RabbitMQ (outbox, consumidores, máquina de estados) + modelo y MLOps (MLflow, exportación, promoción) |
 
-> Completen los nombres. El historial de commits debe mostrar contribuciones de los cuatro.
+> El historial de commits debe mostrar contribuciones de los tres integrantes.
 
 ## Arquitectura en una imagen
 

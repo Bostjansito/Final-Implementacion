@@ -1,5 +1,7 @@
 # Proyecto final — Implementación (Universidad EIA)
 
+**Integrantes:** Pedro Rueda · Samuel Ramírez · Sebastian Pérez
+
 | Carpeta | Contenido |
 |---|---|
 | [`docs/`](docs/) | Enunciados originales: Parte 1 (arquitectura) y Parte 2 (CrediMarket, con los datos). |
