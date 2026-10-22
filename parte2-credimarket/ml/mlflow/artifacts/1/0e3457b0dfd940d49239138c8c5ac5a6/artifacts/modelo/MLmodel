@@ -1,0 +1,41 @@
+artifact_path: modelo
+flavors:
+  python_function:
+    code: code
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.12.15
+  sklearn:
+    code: code
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.6.1
+is_signature_from_type_hint: false
+mlflow_version: 2.22.0
+model_size_bytes: 12351492
+model_uuid: 4851170a85dc4e6f8cf63c1f8ab6f660
+prompts: null
+run_id: 0e3457b0dfd940d49239138c8c5ac5a6
+saved_input_example_info:
+  artifact_path: input_example.json
+  pandas_orient: split
+  serving_input_path: serving_input_example.json
+  type: dataframe
+signature:
+  inputs: '[{"type": "long", "name": "ingresos_mensuales_cop", "required": true},
+    {"type": "long", "name": "obligaciones_mensuales_cop", "required": true}, {"type":
+    "double", "name": "antiguedad_laboral_meses", "required": true}, {"type": "double",
+    "name": "meses_historial_crediticio", "required": false}, {"type": "long", "name":
+    "creditos_previos", "required": true}, {"type": "long", "name": "atrasos_previos_30d",
+    "required": true}, {"type": "double", "name": "porcentaje_pago_puntual", "required":
+    false}, {"type": "long", "name": "monto_solicitado_cop", "required": true}, {"type":
+    "long", "name": "plazo_meses", "required": true}, {"type": "string", "name": "tipo_empleo",
+    "required": true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "float64", "shape": [-1]}}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2026-10-22 01:28:51.802498'

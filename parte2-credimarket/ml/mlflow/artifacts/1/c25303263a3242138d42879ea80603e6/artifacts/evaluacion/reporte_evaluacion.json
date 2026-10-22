@@ -1,0 +1,31 @@
+{
+  "modelo": "logreg_C1_sin_pesos",
+  "familia": "logreg",
+  "justificacion": "Sin class_weight: conserva la calibraci\u00f3n de las probabilidades (comparar Brier con la versi\u00f3n balanceada).",
+  "umbral_referencia": 0.5,
+  "metricas": {
+    "train_precision_1": 0.6407563025210085,
+    "train_recall_1": 0.27714675147660156,
+    "train_f1_1": 0.38693307960672374,
+    "train_roc_auc": 0.7175375102280793,
+    "train_average_precision": 0.5522684530683111,
+    "train_brier": 0.18274561332754963,
+    "train_accuracy": 0.7315277777777778,
+    "train_tn": 4657,
+    "train_fp": 342,
+    "train_fn": 1591,
+    "train_tp": 610,
+    "val_precision_1": 0.610062893081761,
+    "val_recall_1": 0.2646657571623465,
+    "val_f1_1": 0.3691722169362512,
+    "val_roc_auc": 0.6961398988960734,
+    "val_average_precision": 0.5208241496956192,
+    "val_brier": 0.18868495784175102,
+    "val_accuracy": 0.72375,
+    "val_tn": 1543,
+    "val_fp": 124,
+    "val_fn": 539,
+    "val_tp": 194,
+    "duracion_entrenamiento_s": 0.07202180800049973
+  }
+}

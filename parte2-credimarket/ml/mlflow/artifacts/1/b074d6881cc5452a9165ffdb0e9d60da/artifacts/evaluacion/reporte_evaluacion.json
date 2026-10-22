@@ -1,0 +1,31 @@
+{
+  "modelo": "arbol_d4_hoja50",
+  "familia": "arbol",
+  "justificacion": "\u00c1rbol poco profundo: reglas simples y explicables.",
+  "umbral_referencia": 0.5,
+  "metricas": {
+    "train_precision_1": 0.4744755244755245,
+    "train_recall_1": 0.6165379373012267,
+    "train_f1_1": 0.5362576565896068,
+    "train_roc_auc": 0.7066692756997561,
+    "train_average_precision": 0.5157764750755779,
+    "train_brier": 0.21410411487016132,
+    "train_accuracy": 0.6740277777777778,
+    "train_tn": 3496,
+    "train_fp": 1503,
+    "train_fn": 844,
+    "train_tp": 1357,
+    "val_precision_1": 0.4488888888888889,
+    "val_recall_1": 0.5511596180081856,
+    "val_f1_1": 0.4947948560930802,
+    "val_roc_auc": 0.6678575608207146,
+    "val_average_precision": 0.4620862641077139,
+    "val_brier": 0.22294751912446492,
+    "val_accuracy": 0.65625,
+    "val_tn": 1171,
+    "val_fp": 496,
+    "val_fn": 329,
+    "val_tp": 404,
+    "duracion_entrenamiento_s": 0.06987420500081498
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "modelo": "logreg_C0.05_balanced",
+  "familia": "logreg",
+  "justificacion": "M\u00e1s regularizaci\u00f3n L2 para evaluar si el modelo lineal sobreajusta.",
+  "umbral_referencia": 0.5,
+  "metricas": {
+    "train_precision_1": 0.4754953076120959,
+    "train_recall_1": 0.6215356656065425,
+    "train_f1_1": 0.5387948011027964,
+    "train_roc_auc": 0.7176452100960855,
+    "train_average_precision": 0.5520915323091885,
+    "train_brier": 0.21154451323404272,
+    "train_accuracy": 0.6747222222222222,
+    "train_tn": 3490,
+    "train_fp": 1509,
+    "train_fn": 833,
+    "train_tp": 1368,
+    "val_precision_1": 0.4490644490644491,
+    "val_recall_1": 0.5893587994542974,
+    "val_f1_1": 0.5097345132743363,
+    "val_roc_auc": 0.6957896278861554,
+    "val_average_precision": 0.5204480899804783,
+    "val_brier": 0.21752830403708207,
+    "val_accuracy": 0.65375,
+    "val_tn": 1137,
+    "val_fp": 530,
+    "val_fn": 301,
+    "val_tp": 432,
+    "duracion_entrenamiento_s": 0.03497692000019015
+  }
+}

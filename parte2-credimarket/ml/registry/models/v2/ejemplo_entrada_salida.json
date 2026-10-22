@@ -1,0 +1,62 @@
+[
+  {
+    "entrada": {
+      "ingresos_mensuales_cop": 2032000,
+      "obligaciones_mensuales_cop": 341000,
+      "antiguedad_laboral_meses": 11.0,
+      "meses_historial_crediticio": 88.0,
+      "creditos_previos": 4,
+      "atrasos_previos_30d": 1,
+      "porcentaje_pago_puntual": 65.78,
+      "monto_solicitado_cop": 1092000,
+      "plazo_meses": 24,
+      "tipo_empleo": "independiente"
+    },
+    "salida": {
+      "probabilidad_incumplimiento": 0.375597,
+      "decision_riesgo": "ALTO",
+      "umbral": 0.24,
+      "model_version": "v2"
+    }
+  },
+  {
+    "entrada": {
+      "ingresos_mensuales_cop": 1878000,
+      "obligaciones_mensuales_cop": 264000,
+      "antiguedad_laboral_meses": 13.0,
+      "meses_historial_crediticio": 89.0,
+      "creditos_previos": 1,
+      "atrasos_previos_30d": 0,
+      "porcentaje_pago_puntual": 90.18,
+      "monto_solicitado_cop": 4574000,
+      "plazo_meses": 24,
+      "tipo_empleo": "dependiente"
+    },
+    "salida": {
+      "probabilidad_incumplimiento": 0.137037,
+      "decision_riesgo": "BAJO",
+      "umbral": 0.24,
+      "model_version": "v2"
+    }
+  },
+  {
+    "entrada": {
+      "ingresos_mensuales_cop": 3755000,
+      "obligaciones_mensuales_cop": 893000,
+      "antiguedad_laboral_meses": 22.0,
+      "meses_historial_crediticio": 97.0,
+      "creditos_previos": 9,
+      "atrasos_previos_30d": 8,
+      "porcentaje_pago_puntual": 67.45,
+      "monto_solicitado_cop": 7174000,
+      "plazo_meses": 6,
+      "tipo_empleo": "independiente"
+    },
+    "salida": {
+      "probabilidad_incumplimiento": 0.897096,
+      "decision_riesgo": "ALTO",
+      "umbral": 0.24,
+      "model_version": "v2"
+    }
+  }
+]

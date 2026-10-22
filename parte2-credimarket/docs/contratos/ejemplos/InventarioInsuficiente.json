@@ -1,0 +1,13 @@
+{
+    "type": "InventarioInsuficiente",
+    "payload": {
+        "disponible": 0,
+        "producto_id": "d616bc78-8c11-5d69-905a-458461701d02",
+        "cantidad_solicitada": 1
+    },
+    "event_id": "e65487d0-3f3b-41c3-be22-2385fc5971fd",
+    "occurred_at": "2026-10-22T02:22:49.989233+00:00",
+    "prestamo_id": "66fd7e6a-e2b3-4599-bc8b-f48933c2966e",
+    "correlation_id": "demo-4575c568-6884-4959-aa6e-2c01544b209c",
+    "schema_version": 1
+}

@@ -1,0 +1,31 @@
+{
+  "modelo": "hgb_lr0.1_prof4",
+  "familia": "hgb",
+  "justificacion": "Boosting con \u00e1rboles poco profundos (menor riesgo de sobreajuste).",
+  "umbral_referencia": 0.5,
+  "metricas": {
+    "train_precision_1": 0.8291245791245792,
+    "train_recall_1": 0.44752385279418444,
+    "train_f1_1": 0.5812924166420773,
+    "train_roc_auc": 0.8647286931261764,
+    "train_average_precision": 0.7669121213276525,
+    "train_brier": 0.14027118581979942,
+    "train_accuracy": 0.8029166666666666,
+    "train_tn": 4796,
+    "train_fp": 203,
+    "train_fn": 1216,
+    "train_tp": 985,
+    "val_precision_1": 0.5784883720930233,
+    "val_recall_1": 0.27148703956343795,
+    "val_f1_1": 0.3695450324976787,
+    "val_roc_auc": 0.6823565709777554,
+    "val_average_precision": 0.5010304494016925,
+    "val_brier": 0.193215918872687,
+    "val_accuracy": 0.7170833333333333,
+    "val_tn": 1522,
+    "val_fp": 145,
+    "val_fn": 534,
+    "val_tp": 199,
+    "duracion_entrenamiento_s": 0.4157636010004353
+  }
+}

@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-y-pruebas:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: parte2-credimarket
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Construir imágenes
+        run: docker compose build secrets-init productos clientes prestamos inventario frontend
+
+      - name: Pruebas unitarias (dentro de las imágenes)
+        run: sh scripts/pruebas_unitarias.sh
+
+      - name: Levantar el sistema completo
+        run: |
+          docker compose up -d
+          for i in $(seq 1 60); do
+            curl -sf localhost:8003/ready && curl -sf localhost:8001/ready && break
+            sleep 3
+          done
+
+      - name: Pruebas de aceptación (modo rápido)
+        run: python3 scripts/pruebas_aceptacion.py --rapido 1 2 3 4 5 7 8 9 12 13 16 DLQ
+
+      - name: Logs en caso de fallo
+        if: failure()
+        run: docker compose logs --tail 200

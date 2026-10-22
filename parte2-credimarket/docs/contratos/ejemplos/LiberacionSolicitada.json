@@ -1,0 +1,12 @@
+{
+    "type": "LiberacionSolicitada",
+    "payload": {
+        "motivo": "reserva tardía de un préstamo ya finalizado",
+        "producto_id": "ca1e7be9-0448-5462-b217-bd563ec22329"
+    },
+    "event_id": "964a0cb6-a109-4a9e-9912-4318d7fcb328",
+    "occurred_at": "2026-10-22T02:23:31.473362+00:00",
+    "prestamo_id": "2a82253d-fe07-4b76-b430-2e258fd8496e",
+    "correlation_id": "demo-e39fc392-05e1-4edf-9939-c001162f98d7",
+    "schema_version": 1
+}

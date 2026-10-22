@@ -1,0 +1,31 @@
+{
+  "modelo": "logreg_C1_balanced",
+  "familia": "logreg",
+  "justificacion": "Modelo lineal interpretable; class_weight compensa el desbalance 70/30.",
+  "umbral_referencia": 0.5,
+  "metricas": {
+    "train_precision_1": 0.47531293463143254,
+    "train_recall_1": 0.6210813266696956,
+    "train_f1_1": 0.5385069923182982,
+    "train_roc_auc": 0.7176673862714388,
+    "train_average_precision": 0.5520555581210727,
+    "train_brier": 0.21151288531360282,
+    "train_accuracy": 0.6745833333333333,
+    "train_tn": 3490,
+    "train_fp": 1509,
+    "train_fn": 834,
+    "train_tp": 1367,
+    "val_precision_1": 0.44881075491209926,
+    "val_recall_1": 0.592087312414734,
+    "val_f1_1": 0.5105882352941177,
+    "val_roc_auc": 0.6961341701646029,
+    "val_average_precision": 0.5208008003323779,
+    "val_brier": 0.21748334047677445,
+    "val_accuracy": 0.6533333333333333,
+    "val_tn": 1134,
+    "val_fp": 533,
+    "val_fn": 299,
+    "val_tp": 434,
+    "duracion_entrenamiento_s": 0.04304979200060188
+  }
+}

@@ -1,0 +1,246 @@
+name: credimarket
+
+# Secretos: los genera "secrets-init" la primera vez en ./.secrets (ignorado por Git)
+# y se montan de solo lectura en /run/secrets. Ningún secreto vive en el repositorio.
+
+x-python-service: &python-service
+  restart: unless-stopped
+  volumes:
+    - ./.secrets:/run/secrets:ro
+  depends_on: &deps-base
+    secrets-init:
+      condition: service_completed_successfully
+    postgres:
+      condition: service_healthy
+  healthcheck:
+    test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=3)"]
+    interval: 10s
+    timeout: 5s
+    retries: 10
+    start_period: 20s
+
+x-common-env: &common-env
+  JWT_PUBLIC_KEY_FILE: /run/secrets/jwt_public.pem
+  INTERNAL_SERVICE_SECRET_FILE: /run/secrets/internal_service_secret
+  CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:8080}
+  LOG_LEVEL: INFO
+
+services:
+  # ------------------------------------------------------------------ Infraestructura
+  secrets-init:
+    build: ./infra/secrets-init
+    volumes:
+      - ./.secrets:/secrets
+    restart: "no"
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./infra/postgres/01-init.sh:/docker-entrypoint-initdb.d/01-init.sh:ro
+      - ./.secrets:/run/secrets:ro
+    depends_on:
+      secrets-init:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: >
+      sh -c 'exec redis-server --requirepass "$$(cat /run/secrets/redis_password)"
+      --maxmemory 64mb --maxmemory-policy allkeys-lru --save "" --appendonly no'
+    volumes:
+      - ./.secrets:/run/secrets:ro
+    depends_on:
+      secrets-init:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a \"$$(cat /run/secrets/redis_password)\" --no-auth-warning ping | grep PONG"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    hostname: rabbitmq
+    restart: unless-stopped
+    ports:
+      - "15672:15672"   # interfaz de administración (demo)
+    volumes:
+      - rabbitdata:/var/lib/rabbitmq
+      - ./.secrets/rabbitmq:/etc/rabbitmq/conf.d:ro
+    depends_on:
+      secrets-init:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "check_port_connectivity"]
+      interval: 10s
+      timeout: 10s
+      retries: 20
+      start_period: 20s
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.22.0
+    restart: unless-stopped
+    command: >
+      mlflow server --host 0.0.0.0 --port 5000
+      --backend-store-uri sqlite:////mlflow/mlflow.db
+      --artifacts-destination /mlflow/artifacts --serve-artifacts
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./ml/mlflow:/mlflow
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  # ------------------------------------------------------------------ Microservicios
+  productos:
+    <<: *python-service
+    build:
+      context: .
+      dockerfile: services/productos/Dockerfile
+    environment:
+      <<: *common-env
+      DB_USER: productos_user
+      DB_NAME: productos_db
+      DB_PASSWORD_FILE: /run/secrets/productos_db_password
+      REDIS_PASSWORD_FILE: /run/secrets/redis_password
+      CACHE_TTL_SEGUNDOS: ${CACHE_TTL_SEGUNDOS:-300}
+    ports:
+      - "8001:8000"
+    depends_on:
+      <<: *deps-base
+      redis:
+        condition: service_started
+
+  clientes:
+    <<: *python-service
+    build:
+      context: .
+      dockerfile: services/clientes/Dockerfile
+    environment:
+      <<: *common-env
+      DB_USER: clientes_user
+      DB_NAME: clientes_db
+      DB_PASSWORD_FILE: /run/secrets/clientes_db_password
+      JWT_PRIVATE_KEY_FILE: /run/secrets/jwt_private.pem
+      ADMIN_PASSWORD_FILE: /run/secrets/admin_password
+      DEMO_CLIENTE_PASSWORD_FILE: /run/secrets/demo_cliente_password
+      TOKEN_MINUTOS: ${TOKEN_MINUTOS:-30}
+    ports:
+      - "8002:8000"
+
+  prestamos:
+    <<: *python-service
+    build:
+      context: .
+      dockerfile: services/prestamos/Dockerfile
+    environment: &prestamos-env
+      <<: *common-env
+      DB_USER: prestamos_user
+      DB_NAME: prestamos_db
+      DB_PASSWORD_FILE: /run/secrets/prestamos_db_password
+      RABBITMQ_PASSWORD_FILE: /run/secrets/rabbitmq_password
+      CLIENTES_URL: http://clientes:8000
+      PRODUCTOS_URL: http://productos:8000
+      MODEL_REGISTRY: /srv/registry
+      PENDIENTE_TIMEOUT_SEGUNDOS: ${PENDIENTE_TIMEOUT_SEGUNDOS:-600}
+    volumes:
+      - ./.secrets:/run/secrets:ro
+      - ./ml/registry:/srv/registry:ro
+    ports:
+      - "8003:8000"
+
+  prestamos-worker:
+    <<: *python-service
+    build:
+      context: .
+      dockerfile: services/prestamos/Dockerfile
+    command: ["python", "-m", "app.worker"]
+    environment: *prestamos-env
+    volumes:
+      - ./.secrets:/run/secrets:ro
+      - ./ml/registry:/srv/registry:ro
+    healthcheck:
+      disable: true
+    depends_on:
+      <<: *deps-base
+      rabbitmq:
+        condition: service_healthy
+
+  inventario:
+    <<: *python-service
+    build:
+      context: .
+      dockerfile: services/inventario/Dockerfile
+    environment: &inventario-env
+      <<: *common-env
+      DB_USER: inventario_user
+      DB_NAME: inventario_db
+      DB_PASSWORD_FILE: /run/secrets/inventario_db_password
+      RABBITMQ_PASSWORD_FILE: /run/secrets/rabbitmq_password
+      PRODUCTOS_URL: http://productos:8000
+      RESERVA_TTL_SEGUNDOS: ${RESERVA_TTL_SEGUNDOS:-1800}
+    ports:
+      - "8004:8000"
+
+  inventario-worker:
+    <<: *python-service
+    build:
+      context: .
+      dockerfile: services/inventario/Dockerfile
+    command: ["python", "-m", "app.worker"]
+    environment: *inventario-env
+    healthcheck:
+      disable: true
+    depends_on:
+      <<: *deps-base
+      rabbitmq:
+        condition: service_healthy
+
+  # ------------------------------------------------------------------ Frontend
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    environment:
+      MLFLOW_PUBLIC_URL: ${MLFLOW_PUBLIC_URL:-http://localhost:5000}
+      RABBITMQ_PUBLIC_URL: ${RABBITMQ_PUBLIC_URL:-http://localhost:15672}
+    ports:
+      - "8080:80"
+    depends_on:
+      - productos
+      - clientes
+      - prestamos
+      - inventario
+
+  # ------------------------------------------------------------------ Entrenamiento (fuera de línea)
+  ml-trainer:
+    profiles: ["ml"]
+    build:
+      context: .
+      dockerfile: ml/Dockerfile
+    environment:
+      MLFLOW_TRACKING_URI: http://mlflow:5000
+      GIT_COMMIT: ${GIT_COMMIT:-}
+    volumes:
+      - ./ml:/work/ml
+      - ./data:/work/data:ro
+    depends_on:
+      mlflow:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+  rabbitdata:

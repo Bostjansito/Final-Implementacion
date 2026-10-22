@@ -1,0 +1,13 @@
+{
+    "type": "SalidaConfirmada",
+    "payload": {
+        "cantidad": 1,
+        "reserva_id": "d6c4f2a2-a2ed-45d0-8fcc-acf2e3c52c1d",
+        "producto_id": "94a7bbc7-1176-5ce6-95b1-ceb6de1c6e75"
+    },
+    "event_id": "b601ef7d-4c05-4c1c-80f6-ccc131493850",
+    "occurred_at": "2026-10-22T02:22:49.078047+00:00",
+    "prestamo_id": "faa31a27-71c8-41aa-b30f-2421a0d3c111",
+    "correlation_id": "demo-c9cad7c4-8d29-47cc-aff2-870c31c20e53",
+    "schema_version": 1
+}

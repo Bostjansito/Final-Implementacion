@@ -1,0 +1,31 @@
+{
+  "modelo": "arbol_d8_hoja20",
+  "familia": "arbol",
+  "justificacion": "\u00c1rbol m\u00e1s profundo para capturar interacciones; hoja m\u00ednima limita el sobreajuste.",
+  "umbral_referencia": 0.5,
+  "metricas": {
+    "train_precision_1": 0.5136363636363637,
+    "train_recall_1": 0.7187641980917765,
+    "train_f1_1": 0.599128952849839,
+    "train_roc_auc": 0.7803426200914876,
+    "train_average_precision": 0.6269043388277725,
+    "train_brier": 0.18948750941050746,
+    "train_accuracy": 0.7059722222222222,
+    "train_tn": 3501,
+    "train_fp": 1498,
+    "train_fn": 619,
+    "train_tp": 1582,
+    "val_precision_1": 0.39789069990412274,
+    "val_recall_1": 0.5661664392905866,
+    "val_f1_1": 0.46734234234234234,
+    "val_roc_auc": 0.6326757840792006,
+    "val_average_precision": 0.44181624065997055,
+    "val_brier": 0.24203923544812586,
+    "val_accuracy": 0.6058333333333333,
+    "val_tn": 1039,
+    "val_fp": 628,
+    "val_fn": 318,
+    "val_tp": 415,
+    "duracion_entrenamiento_s": 0.11153116799869167
+  }
+}

@@ -1,0 +1,13 @@
+{
+    "type": "ReservaVencida",
+    "payload": {
+        "cantidad": 1,
+        "reserva_id": "73a7f3ab-f924-4d4d-a4c9-07752042dce1",
+        "producto_id": "24b82d71-6ca8-54a2-99db-bcb62c606961"
+    },
+    "event_id": "b21a3d66-2223-4f0f-bc40-e25adbad98d9",
+    "occurred_at": "2026-10-22T02:39:00.316301+00:00",
+    "prestamo_id": "c4534429-6766-44f4-b1b7-0618f67906b8",
+    "correlation_id": "demo-66a7d257-6e7b-4680-b4fd-85a452d5bfe7",
+    "schema_version": 1
+}

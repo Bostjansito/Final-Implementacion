@@ -1,0 +1,23 @@
+{
+  "archivo": "prestamos_entrenamiento.csv",
+  "sha256": "c6cdc437c3aecc9116bc8b978df421d5a7600634c1ad7d6f82e58222a2446ecd",
+  "version": "prestamos_entrenamiento@c6cdc437c3ae",
+  "filas": 12000,
+  "columnas": 15,
+  "estrategia_particion": "estratificada por incumplimiento_90d, 60/20/20, semilla 42, un registro por cliente",
+  "particiones": {
+    "train": {
+      "filas": 7200,
+      "tasa_incumplimiento": 0.3057
+    },
+    "val": {
+      "filas": 2400,
+      "tasa_incumplimiento": 0.3054
+    },
+    "test": {
+      "filas": 2400,
+      "tasa_incumplimiento": 0.3054
+    }
+  },
+  "generado_at": "2026-10-22T01:27:40.963376+00:00"
+}

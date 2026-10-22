@@ -1,0 +1,31 @@
+{
+  "modelo": "rf_200_d8",
+  "familia": "rf",
+  "justificacion": "Bosque con profundidad moderada: reduce varianza respecto al \u00e1rbol individual.",
+  "umbral_referencia": 0.5,
+  "metricas": {
+    "train_precision_1": 0.6009136212624585,
+    "train_recall_1": 0.6574284416174466,
+    "train_f1_1": 0.6279019310045563,
+    "train_roc_auc": 0.8165350471275536,
+    "train_average_precision": 0.6970635126609523,
+    "train_brier": 0.18242492095124205,
+    "train_accuracy": 0.7618055555555555,
+    "train_tn": 4038,
+    "train_fp": 961,
+    "train_fn": 754,
+    "train_tp": 1447,
+    "val_precision_1": 0.470074812967581,
+    "val_recall_1": 0.514324693042292,
+    "val_f1_1": 0.49120521172638437,
+    "val_roc_auc": 0.6834433931767534,
+    "val_average_precision": 0.49423886118389526,
+    "val_brier": 0.2138257116409563,
+    "val_accuracy": 0.6745833333333333,
+    "val_tn": 1242,
+    "val_fp": 425,
+    "val_fn": 356,
+    "val_tp": 377,
+    "duracion_entrenamiento_s": 2.1660302899999806
+  }
+}

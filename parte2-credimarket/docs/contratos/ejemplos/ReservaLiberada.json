@@ -1,0 +1,14 @@
+{
+    "type": "ReservaLiberada",
+    "payload": {
+        "reserva_id": "e938d29a-9147-4d6b-816a-d67c5559dd74",
+        "producto_id": "ca1e7be9-0448-5462-b217-bd563ec22329",
+        "estado_reserva": "LIBERADA",
+        "cantidad_liberada": 0
+    },
+    "event_id": "567a4a07-97f3-41c5-bc04-92ef66971b06",
+    "occurred_at": "2026-10-22T02:23:31.631847+00:00",
+    "prestamo_id": "2a82253d-fe07-4b76-b430-2e258fd8496e",
+    "correlation_id": "demo-e39fc392-05e1-4edf-9939-c001162f98d7",
+    "schema_version": 1
+}

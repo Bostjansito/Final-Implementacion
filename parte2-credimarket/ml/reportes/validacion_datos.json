@@ -1,0 +1,129 @@
+{
+  "filas": 12000,
+  "columnas": [
+    "solicitud_id",
+    "cliente_id",
+    "ingresos_mensuales_cop",
+    "obligaciones_mensuales_cop",
+    "tipo_empleo",
+    "antiguedad_laboral_meses",
+    "meses_historial_crediticio",
+    "creditos_previos",
+    "atrasos_previos_30d",
+    "porcentaje_pago_puntual",
+    "monto_solicitado_cop",
+    "plazo_meses",
+    "tasa_mensual_simulada",
+    "cuota_estimada_cop",
+    "incumplimiento_90d"
+  ],
+  "columnas_faltantes": [],
+  "tipos": {
+    "solicitud_id": {
+      "esperado": "object",
+      "real": "object",
+      "ok": true
+    },
+    "cliente_id": {
+      "esperado": "object",
+      "real": "object",
+      "ok": true
+    },
+    "ingresos_mensuales_cop": {
+      "esperado": "int",
+      "real": "int64",
+      "ok": true
+    },
+    "obligaciones_mensuales_cop": {
+      "esperado": "int",
+      "real": "int64",
+      "ok": true
+    },
+    "tipo_empleo": {
+      "esperado": "object",
+      "real": "object",
+      "ok": true
+    },
+    "antiguedad_laboral_meses": {
+      "esperado": "float",
+      "real": "float64",
+      "ok": true
+    },
+    "meses_historial_crediticio": {
+      "esperado": "float",
+      "real": "float64",
+      "ok": true
+    },
+    "creditos_previos": {
+      "esperado": "int",
+      "real": "int64",
+      "ok": true
+    },
+    "atrasos_previos_30d": {
+      "esperado": "int",
+      "real": "int64",
+      "ok": true
+    },
+    "porcentaje_pago_puntual": {
+      "esperado": "float",
+      "real": "float64",
+      "ok": true
+    },
+    "monto_solicitado_cop": {
+      "esperado": "int",
+      "real": "int64",
+      "ok": true
+    },
+    "plazo_meses": {
+      "esperado": "int",
+      "real": "int64",
+      "ok": true
+    },
+    "tasa_mensual_simulada": {
+      "esperado": "float",
+      "real": "float64",
+      "ok": true
+    },
+    "cuota_estimada_cop": {
+      "esperado": "float",
+      "real": "float64",
+      "ok": true
+    },
+    "incumplimiento_90d": {
+      "esperado": "int",
+      "real": "int64",
+      "ok": true
+    }
+  },
+  "faltantes": {
+    "tipo_empleo": 93,
+    "antiguedad_laboral_meses": 91,
+    "meses_historial_crediticio": 97,
+    "porcentaje_pago_puntual": 2473
+  },
+  "faltantes_pct": {
+    "tipo_empleo": 0.78,
+    "antiguedad_laboral_meses": 0.76,
+    "meses_historial_crediticio": 0.81,
+    "porcentaje_pago_puntual": 20.61
+  },
+  "duplicados": {
+    "solicitud_id": 0,
+    "cliente_id": 0,
+    "filas_sin_ids": 0
+  },
+  "fuera_de_rango": {},
+  "clases": {
+    "0": 8333,
+    "1": 3667
+  },
+  "tasa_incumplimiento": 0.3056,
+  "columnas_constantes": [
+    "tasa_mensual_simulada"
+  ],
+  "cuota_redundante": {
+    "max_diferencia_cop": 0.005,
+    "conclusion": "cuota_estimada_cop = f(monto, plazo, tasa constante)"
+  },
+  "valido": true
+}

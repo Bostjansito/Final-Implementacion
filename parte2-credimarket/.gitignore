@@ -1,0 +1,17 @@
+# Secretos generados localmente por secrets-init: NUNCA se versionan
+.secrets/
+.env
+
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+node_modules/
+frontend/dist/
+
+# Salidas regenerables de los scripts
+scripts/resultados/
+ml/artefactos/predicciones_locales_*.json
+
+# ml/mlflow (historial de experimentos) y ml/artefactos/particiones SÍ se versionan:
+# son entregables (historial consultable e identificadores de cada partición).

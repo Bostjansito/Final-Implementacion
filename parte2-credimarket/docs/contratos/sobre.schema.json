@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://credimarket.test/contratos/sobre/v1",
+  "title": "Sobre común de comandos y eventos de CrediMarket (schema_version 1)",
+  "type": "object",
+  "required": ["event_id", "type", "schema_version", "occurred_at", "correlation_id", "prestamo_id", "payload"],
+  "additionalProperties": false,
+  "properties": {
+    "event_id": { "type": "string", "format": "uuid", "description": "Identificador único del mensaje; base de la idempotencia del consumidor (inbox)." },
+    "type": {
+      "enum": ["ReservaSolicitada", "LiberacionSolicitada", "InventarioReservado", "InventarioInsuficiente",
+               "ReservaLiberada", "ReservaVencida", "SalidaConfirmada"]
+    },
+    "schema_version": { "const": 1 },
+    "occurred_at": { "type": "string", "format": "date-time" },
+    "correlation_id": { "type": "string", "description": "Idempotency-Key de la solicitud HTTP que originó el flujo." },
+    "prestamo_id": { "type": "string", "format": "uuid" },
+    "payload": { "type": "object" }
+  },
+  "allOf": [
+    { "if": { "properties": { "type": { "const": "ReservaSolicitada" } } },
+      "then": { "properties": { "payload": { "required": ["producto_id", "cantidad"], "additionalProperties": false,
+        "properties": { "producto_id": { "type": "string" }, "cantidad": { "type": "integer", "minimum": 1 } } } } } },
+    { "if": { "properties": { "type": { "const": "LiberacionSolicitada" } } },
+      "then": { "properties": { "payload": { "required": ["producto_id", "motivo"], "additionalProperties": false,
+        "properties": { "producto_id": { "type": "string" }, "motivo": { "type": "string" } } } } } },
+    { "if": { "properties": { "type": { "const": "InventarioReservado" } } },
+      "then": { "properties": { "payload": { "required": ["reserva_id", "producto_id", "cantidad", "expira_at"] } } } },
+    { "if": { "properties": { "type": { "const": "InventarioInsuficiente" } } },
+      "then": { "properties": { "payload": { "required": ["producto_id", "cantidad_solicitada", "disponible"] } } } },
+    { "if": { "properties": { "type": { "const": "ReservaLiberada" } } },
+      "then": { "properties": { "payload": { "required": ["reserva_id", "producto_id", "cantidad_liberada", "estado_reserva"] } } } },
+    { "if": { "properties": { "type": { "const": "ReservaVencida" } } },
+      "then": { "properties": { "payload": { "required": ["reserva_id", "producto_id", "cantidad"] } } } },
+    { "if": { "properties": { "type": { "const": "SalidaConfirmada" } } },
+      "then": { "properties": { "payload": { "required": ["reserva_id", "producto_id", "cantidad"] } } } }
+  ]
+}

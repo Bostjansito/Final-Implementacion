@@ -1,0 +1,12 @@
+{
+    "type": "ReservaSolicitada",
+    "payload": {
+        "cantidad": 1,
+        "producto_id": "6341ddb6-b734-5cb7-aff9-f88c05b1f15f"
+    },
+    "event_id": "e0d8a528-c14c-4108-a358-99e6687c4f39",
+    "occurred_at": "2026-10-22T02:31:58.911886+00:00",
+    "prestamo_id": "8d0470a7-da26-4a76-98de-68099826adb3",
+    "correlation_id": "6f89f7b1-fa31-46ff-b2c0-8c8216995eba",
+    "schema_version": 1
+}

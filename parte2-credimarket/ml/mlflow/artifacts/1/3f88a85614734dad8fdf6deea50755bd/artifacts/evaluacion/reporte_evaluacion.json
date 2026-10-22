@@ -1,0 +1,31 @@
+{
+  "modelo": "hgb_lr0.05_hojas15",
+  "familia": "hgb",
+  "justificacion": "Boosting con tasa de aprendizaje baja y regularizaci\u00f3n L2.",
+  "umbral_referencia": 0.5,
+  "metricas": {
+    "train_precision_1": 0.8567753001715266,
+    "train_recall_1": 0.4538845979100409,
+    "train_f1_1": 0.5934065934065934,
+    "train_roc_auc": 0.8776138689800659,
+    "train_average_precision": 0.7875785868379571,
+    "train_brier": 0.1368907212079883,
+    "train_accuracy": 0.8098611111111111,
+    "train_tn": 4832,
+    "train_fp": 167,
+    "train_fn": 1202,
+    "train_tp": 999,
+    "val_precision_1": 0.5738636363636364,
+    "val_recall_1": 0.2755798090040928,
+    "val_f1_1": 0.3723502304147465,
+    "val_roc_auc": 0.6881655046889669,
+    "val_average_precision": 0.5048531175902503,
+    "val_brier": 0.19196215472416364,
+    "val_accuracy": 0.71625,
+    "val_tn": 1517,
+    "val_fp": 150,
+    "val_fn": 531,
+    "val_tp": 202,
+    "duracion_entrenamiento_s": 0.7688968880011089
+  }
+}

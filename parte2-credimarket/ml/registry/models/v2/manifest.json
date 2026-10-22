@@ -1,0 +1,388 @@
+{
+  "model_version": "v2",
+  "run_id": "3f88a85614734dad8fdf6deea50755bd",
+  "run_name": "hgb_lr0.05_hojas15",
+  "experimento": "credimarket-riesgo-incumplimiento",
+  "algoritmo": "HistGradientBoostingClassifier",
+  "dataset": {
+    "archivo": "prestamos_entrenamiento.csv",
+    "version": "prestamos_entrenamiento@c6cdc437c3ae",
+    "sha256": "c6cdc437c3aecc9116bc8b978df421d5a7600634c1ad7d6f82e58222a2446ecd"
+  },
+  "variables_entrada": {
+    "ingresos_mensuales_cop": {
+      "tipo": "int",
+      "min": 100000,
+      "max": 200000000,
+      "nulo": false
+    },
+    "obligaciones_mensuales_cop": {
+      "tipo": "int",
+      "min": 0,
+      "max": 200000000,
+      "nulo": false
+    },
+    "antiguedad_laboral_meses": {
+      "tipo": "float",
+      "min": 0,
+      "max": 600,
+      "nulo": true
+    },
+    "meses_historial_crediticio": {
+      "tipo": "float",
+      "min": 0,
+      "max": 600,
+      "nulo": true
+    },
+    "creditos_previos": {
+      "tipo": "int",
+      "min": 0,
+      "max": 100,
+      "nulo": false
+    },
+    "atrasos_previos_30d": {
+      "tipo": "int",
+      "min": 0,
+      "max": 100,
+      "nulo": false
+    },
+    "porcentaje_pago_puntual": {
+      "tipo": "float",
+      "min": 0,
+      "max": 100,
+      "nulo": true
+    },
+    "monto_solicitado_cop": {
+      "tipo": "int",
+      "min": 500000,
+      "max": 15000000,
+      "nulo": false
+    },
+    "plazo_meses": {
+      "tipo": "int",
+      "valores": [
+        6,
+        12,
+        18,
+        24,
+        36
+      ],
+      "nulo": false
+    },
+    "tipo_empleo": {
+      "tipo": "categoria",
+      "valores": [
+        "dependiente",
+        "independiente",
+        "temporal"
+      ],
+      "nulo": true
+    }
+  },
+  "variables_derivadas": [
+    "cuota_calculada_cop",
+    "ratio_endeudamiento",
+    "ratio_cuota_ingreso",
+    "carga_financiera",
+    "ratio_monto_ingreso"
+  ],
+  "clase_positiva": {
+    "columna": "incumplimiento_90d",
+    "valor": 1,
+    "significado": "incumplió en 90 días"
+  },
+  "umbral": 0.24,
+  "regla_decision": "probabilidad >= umbral -> riesgo ALTO (desfavorable)",
+  "costos_umbral": {
+    "falso_negativo": 3.0,
+    "falso_positivo": 1.0,
+    "nota": "costos ficticios"
+  },
+  "seleccion": {
+    "metrica": "val_average_precision",
+    "desempate": "si |ΔAP| < 0.005 se consideran empatados; entre ellos, los que estén a < 0.005 del mayor val_roc_auc; si persiste: menor complejidad (logreg < arbol < hgb < rf); si persiste: menor val_brier (mejor calibración)"
+  },
+  "metricas": {
+    "validacion": {
+      "val_precision_1": 0.573864,
+      "val_recall_1": 0.27558,
+      "val_f1_1": 0.37235,
+      "val_roc_auc": 0.688166,
+      "val_average_precision": 0.504853,
+      "val_brier": 0.191962,
+      "val_accuracy": 0.71625,
+      "val_tn": 1517.0,
+      "val_fp": 150.0,
+      "val_fn": 531.0,
+      "val_tp": 202.0,
+      "val_umbral_precision_1": 0.416864,
+      "val_umbral_recall_1": 0.721692,
+      "val_umbral_f1_1": 0.528472,
+      "val_umbral_roc_auc": 0.688166,
+      "val_umbral_average_precision": 0.504853,
+      "val_umbral_brier": 0.191962,
+      "val_umbral_accuracy": 0.606667,
+      "val_umbral_tn": 927,
+      "val_umbral_fp": 740,
+      "val_umbral_fn": 204,
+      "val_umbral_tp": 529,
+      "val_costo_esperado": 0.563333
+    },
+    "prueba": {
+      "test_precision_1": 0.397665,
+      "test_recall_1": 0.697135,
+      "test_f1_1": 0.506442,
+      "test_roc_auc": 0.680743,
+      "test_average_precision": 0.511171,
+      "test_brier": 0.192673,
+      "test_accuracy": 0.585,
+      "test_tn": 893,
+      "test_fp": 774,
+      "test_fn": 222,
+      "test_tp": 511,
+      "test_costo_esperado": 0.6
+    }
+  },
+  "dependencias": {
+    "python": "3.12.15",
+    "scikit-learn": "1.6.1",
+    "pandas": "2.2.3",
+    "numpy": "2.2.5",
+    "joblib": "1.4.2"
+  },
+  "artefacto": {
+    "archivo": "modelo.joblib",
+    "sha256": "5a455a1aa5b7e04469ed7abc928c4ffe946aa999ea5cddd347b3e313311e89f2"
+  },
+  "codigo_version": "047e6d9f81a25c3d",
+  "git_commit": "sin-git",
+  "referencia_drift": {
+    "ingresos_mensuales_cop": {
+      "cortes": [
+        null,
+        1723800.0000000002,
+        2275000.0,
+        2813000.0,
+        3319000.0,
+        3956500.0,
+        4680000.0,
+        5595300.0,
+        6838000.0,
+        9108300.000000002,
+        null
+      ],
+      "proporciones": [
+        0.1,
+        0.099861,
+        0.1,
+        0.099722,
+        0.100417,
+        0.099861,
+        0.100139,
+        0.099861,
+        0.100139,
+        0.1
+      ],
+      "faltantes": 0.0
+    },
+    "obligaciones_mensuales_cop": {
+      "cortes": [
+        null,
+        272800.0000000002,
+        447000.0,
+        618000.0,
+        783000.0,
+        990000.0,
+        1246000.0,
+        1577000.0,
+        2058200.0000000007,
+        3007000.0,
+        null
+      ],
+      "proporciones": [
+        0.1,
+        0.099583,
+        0.100278,
+        0.099722,
+        0.099861,
+        0.100278,
+        0.100139,
+        0.100139,
+        0.099861,
+        0.100139
+      ],
+      "faltantes": 0.0
+    },
+    "antiguedad_laboral_meses": {
+      "cortes": [
+        null,
+        9.0,
+        14.0,
+        20.0,
+        25.0,
+        31.0,
+        37.0,
+        46.0,
+        57.0,
+        74.0,
+        null
+      ],
+      "proporciones": [
+        0.097759,
+        0.087255,
+        0.114566,
+        0.097759,
+        0.101261,
+        0.085294,
+        0.114146,
+        0.0993,
+        0.10084,
+        0.101821
+      ],
+      "faltantes": 0.008333
+    },
+    "meses_historial_crediticio": {
+      "cortes": [
+        null,
+        16.0,
+        24.0,
+        32.0,
+        40.0,
+        48.0,
+        57.0,
+        69.0,
+        84.0,
+        109.0,
+        null
+      ],
+      "proporciones": [
+        0.09691,
+        0.09663,
+        0.099706,
+        0.103622,
+        0.09663,
+        0.098308,
+        0.104321,
+        0.099846,
+        0.102084,
+        0.101944
+      ],
+      "faltantes": 0.006806
+    },
+    "creditos_previos": {
+      "cortes": [
+        null,
+        1.0,
+        2.0,
+        3.0,
+        4.0,
+        5.0,
+        null
+      ],
+      "proporciones": [
+        0.201528,
+        0.226944,
+        0.184028,
+        0.135278,
+        0.095139,
+        0.157083
+      ],
+      "faltantes": 0.0
+    },
+    "atrasos_previos_30d": {
+      "cortes": [
+        null,
+        1.0,
+        2.0,
+        null
+      ],
+      "proporciones": [
+        0.568611,
+        0.246528,
+        0.184861
+      ],
+      "faltantes": 0.0
+    },
+    "porcentaje_pago_puntual": {
+      "cortes": [
+        null,
+        66.378,
+        73.636,
+        78.78,
+        82.7,
+        86.02,
+        88.84,
+        91.506,
+        94.09,
+        96.65,
+        null
+      ],
+      "proporciones": [
+        0.100017,
+        0.100017,
+        0.09967,
+        0.100017,
+        0.100191,
+        0.09967,
+        0.100365,
+        0.099843,
+        0.099843,
+        0.100365
+      ],
+      "faltantes": 0.201528
+    },
+    "monto_solicitado_cop": {
+      "cortes": [
+        null,
+        1290000.0,
+        1767800.0000000002,
+        2227100.000000001,
+        2690000.0,
+        3182000.0,
+        3779000.000000003,
+        4580300.0,
+        5771400.000000002,
+        7930200.000000001,
+        null
+      ],
+      "proporciones": [
+        0.099722,
+        0.100278,
+        0.1,
+        0.099722,
+        0.1,
+        0.100278,
+        0.1,
+        0.1,
+        0.1,
+        0.1
+      ],
+      "faltantes": 0.0
+    },
+    "plazo_meses": {
+      "cortes": [
+        null,
+        12.0,
+        18.0,
+        24.0,
+        null
+      ],
+      "proporciones": [
+        0.116944,
+        0.239583,
+        0.176944,
+        0.466528
+      ],
+      "faltantes": 0.0
+    },
+    "tipo_empleo": {
+      "categorias": {
+        "dependiente": 0.562083,
+        "independiente": 0.292778,
+        "temporal": 0.138056,
+        "desconocido": 0.007083
+      }
+    }
+  },
+  "creado_at": "2026-10-22T01:29:34.315459+00:00"
+}

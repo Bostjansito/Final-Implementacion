@@ -1,0 +1,31 @@
+{
+  "modelo": "rf_200_d12",
+  "familia": "rf",
+  "justificacion": "Bosque m\u00e1s profundo para comprobar si m\u00e1s capacidad mejora AP en validaci\u00f3n.",
+  "umbral_referencia": 0.5,
+  "metricas": {
+    "train_precision_1": 0.8001854427445526,
+    "train_recall_1": 0.7841890049977283,
+    "train_f1_1": 0.7921064708581919,
+    "train_roc_auc": 0.9488851882143808,
+    "train_average_precision": 0.8964945051686267,
+    "train_brier": 0.1301449209664622,
+    "train_accuracy": 0.8741666666666666,
+    "train_tn": 4568,
+    "train_fp": 431,
+    "train_fn": 475,
+    "train_tp": 1726,
+    "val_precision_1": 0.4900763358778626,
+    "val_recall_1": 0.4379263301500682,
+    "val_f1_1": 0.46253602305475505,
+    "val_roc_auc": 0.6821298768895607,
+    "val_average_precision": 0.48946307803101285,
+    "val_brier": 0.2045082184704545,
+    "val_accuracy": 0.6891666666666667,
+    "val_tn": 1333,
+    "val_fp": 334,
+    "val_fn": 412,
+    "val_tp": 321,
+    "duracion_entrenamiento_s": 2.1835434099994018
+  }
+}
