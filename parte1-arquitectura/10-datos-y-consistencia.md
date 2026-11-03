@@ -123,12 +123,14 @@ Dos apuestas simultáneas del mismo usuario se **serializan** por el bloqueo de 
 stateDiagram-v2
     [*] --> PROGRAMADA
     PROGRAMADA --> ABIERTA: abre_at (programador)
-    ABIERTA --> CERRADA_EN_CURSO: cierre_at = hora de inicio
-    CERRADA_EN_CURSO --> FINALIZADA: resultado oficial (operador + aprobación)
+    ABIERTA --> CERRADA: cierre_at = hora de inicio (reloj del servidor)
+    CERRADA --> EN_CURSO: el operador da la salida (CarreraIniciada)
+    EN_CURSO --> FINALIZADA: resultado oficial (operador + aprobación)
     FINALIZADA --> LIQUIDADA: LiquidacionCompletada
     PROGRAMADA --> CANCELADA
     ABIERTA --> CANCELADA
-    CERRADA_EN_CURSO --> CANCELADA
+    CERRADA --> CANCELADA
+    EN_CURSO --> CANCELADA
     FINALIZADA --> FINALIZADA: ResultadoCorregido (nueva versión)
     LIQUIDADA --> LIQUIDADA: ResultadoCorregido (liquidación compensatoria)
     LIQUIDADA --> [*]
