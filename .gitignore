@@ -6,3 +6,7 @@ __pycache__/
 *.pyc
 .DS_Store
 Thumbs.db
+
+# Contexto local para Claude Code (no se versiona)
+CLAUDE.md
+.claude/
