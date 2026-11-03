@@ -2,7 +2,7 @@
 
 Uso:
     python seleccionar_exportar.py --version v1                 # mejor candidato global
-    python seleccionar_exportar.py --version v2 --familia logreg  # versión alternativa (para promoción/rollback)
+    python seleccionar_exportar.py --version v2 --familia hgb     # versión alternativa (para promoción/rollback)
 """
 import argparse
 import json

@@ -1,5 +1,7 @@
 * text=auto
 *.sh text eol=lf
+# Los CSV se identifican por su SHA-256 (ml/artefactos/datos_version.json): siempre LF.
+*.csv text eol=lf
 *.py text eol=lf
 Dockerfile text eol=lf
 *.conf text eol=lf

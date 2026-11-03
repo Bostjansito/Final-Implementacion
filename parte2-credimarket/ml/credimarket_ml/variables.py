@@ -1,6 +1,6 @@
 """Definición de variables del modelo de riesgo.
 
-Decisiones (ver ml/reportes/informe_seleccion.md):
+Decisiones (ver docs/ml-mlops.md y ml/reportes/informe_seleccion_v1.md):
 * ``solicitud_id`` y ``cliente_id`` -> excluidos: son identificadores de trazabilidad.
 * ``incumplimiento_90d`` -> etiqueta (clase positiva = 1); nunca es entrada.
 * ``tasa_mensual_simulada`` -> excluida: es constante (0,018) en todo el histórico.
