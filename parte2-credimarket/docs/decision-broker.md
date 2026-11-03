@@ -33,7 +33,9 @@
 | Mensaje duplicado (reentrega o relay repetido) | **Inbox**: `INSERT INTO mensajes_procesados(event_id) ON CONFLICT DO NOTHING` en la **misma transacción** que el efecto. Si ya existía, se ignora. El *ack* se hace **después** del *commit*. Además, `UNIQUE(prestamo_id)` en `reservas` impide reservar dos veces aunque llegue el mismo comando con otro `event_id`. |
 | Error transitorio (BD caída, *deadlock*) | Se republica en `<cola>.retry` con `x-reintentos+1`. Tras 5 s vuelve a la cola. **Máximo 3 reintentos** (`MAX_REINTENTOS`). |
 | Error permanente o mensaje inválido (JSON malo, tipo desconocido, `schema_version` no soportada) | Directo a **`<cola>.dlq`** con la cabecera `x-error` (caso "DLQ" de las pruebas). |
-| Persistencia | Mensajes `delivery_mode=2` y colas quorum replicadas y durables (volumen `rabbitdata`). |
+| Persistencia | Mensajes `delivery_mode=2` y colas quorum durables (volumen `rabbitdata`). En la demo hay **un solo nodo**, así que no hay réplica real; con un clúster de 3 nodos las colas quorum replicarían sin cambiar el código. |
+| Reenvío a `.retry` o a la DLQ | El canal del consumidor también usa *publisher confirms*: el original solo recibe *ack* cuando el broker confirmó el reenvío. Si no confirma, RabbitMQ reentrega el original. |
+| Mensaje del outbox no enrutable | Se cuenta el intento y el relay sigue con los demás (no bloquea el outbox). Tras `MAX_INTENTOS_PUBLICACION` (10) queda en el outbox con `publicado_at` vacío para revisión manual. |
 
 > Las garantías del broker son *al menos una vez*. El efecto "exactamente una vez" lo dan la idempotencia del inbox y las restricciones únicas en la base de datos.
 

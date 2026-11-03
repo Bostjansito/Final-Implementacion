@@ -25,7 +25,7 @@
 |---|---|---|
 | **Usuarios** | Perfil, datos personales (cifrados), asignación de roles (`APOSTADOR`, `OPERADOR`, `ADMIN`, `AUDITOR`), bloqueo y desbloqueo. Publica `UsuarioBloqueado`. | No guarda contraseñas (lo hace el IdP). No maneja saldo. |
 | **Medianos** | Ficha de cada competidor (nombre, edad, peso, estado). Victorias, derrotas y velocidad promedio se actualizan al consumir `ResultadoPublicado`. | No calcula estadísticas premium (eso es analítica). |
-| **Carreras** | Crear, programar, inscribir participantes, abrir apuestas, cerrar (programador a la hora exacta), registrar resultados oficiales, corregirlos y cancelar. Hace cumplir la máquina de estados `PROGRAMADA → ABIERTA → CERRADA_EN_CURSO → FINALIZADA → LIQUIDADA` (+ `CANCELADA`). | No valida apuestas ni paga premios. |
+| **Carreras** | Crear, programar, inscribir participantes, abrir apuestas, cerrar (programador a la hora exacta), registrar resultados oficiales, corregirlos y cancelar. Hace cumplir la máquina de estados del enunciado `PROGRAMADA → ABIERTA → CERRADA → EN_CURSO → FINALIZADA → LIQUIDADA` (+ `CANCELADA` desde cualquier estado anterior a `FINALIZADA`). | No valida apuestas ni paga premios. |
 | **Admin** | Backoffice de operadores y administradores, con MFA obligatorio. Cada acción genera un evento de auditoría. | — |
 
 ### Servicio Apuestas
@@ -41,7 +41,7 @@
 - API **solo interna** (gRPC) para Apuestas y el Liquidador; consulta de saldo y movimientos para el usuario a través del Gateway (solo lectura).
 
 ### Servicio Notificaciones
-- Consume eventos (`ApuestaAceptada`, `CarreraIniciada`, `CarreraFinalizada`, `PremioPagado`, `CarreraCancelada`, …).
+- Consume eventos (`ApuestaRealizada`, `CarreraIniciada`, `ResultadoPublicado`, `PremioPagado`, `CarreraCancelada`, …).
 - Aplica preferencias del usuario y plantillas, y envía por correo, *push* o app a través de proveedores administrados (SES, FCM/APNs).
 - Reintentos con *backoff* y cola de mensajes muertos. Si se cae, **nadie más se entera**.
 

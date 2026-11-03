@@ -77,3 +77,4 @@ cd frontend && npm ci && npm run dev   # http://localhost:5173 (proxy a los serv
 | Un puerto está ocupado | Cambie el puerto publicado en `docker-compose.yml`. |
 | `prestamos` no está *ready* | `curl localhost:8003/ready` muestra `modelo_error`. Verifique que exista `ml/registry/active.json`. |
 | Quiere empezar de cero, incluidas las contraseñas | `docker compose down -v` y borrar la carpeta `.secrets/`. |
+| `preparar_datos.py` o `entrenar.py` dicen "El dataset cambió" (típico en Windows) | El CSV quedó con finales de línea CRLF y su SHA-256 ya no coincide. `.gitattributes` fuerza LF en los `*.csv`; en un clon anterior a ese cambio ejecute `git add --renormalize . && git checkout -- '*.csv'`. |

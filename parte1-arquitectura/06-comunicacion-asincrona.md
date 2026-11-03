@@ -35,7 +35,8 @@
 | `UsuarioBloqueado` / `UsuarioDesbloqueado` | Core – Usuarios | Kafka `usuarios.eventos` | Apuestas (conjunto de bloqueados en Redis), Auditoría, Data lake | `usuario_id` |
 | `CarreraProgramada` | Core – Carreras | Kafka `carreras.eventos` | Apuestas (precarga de caché), Notificaciones, Data lake | `carrera_id` |
 | `CarreraAbierta` | Core – Carreras | Kafka `carreras.eventos` | Apuestas (activa la carrera en Redis), Notificaciones, Data lake | `carrera_id` |
-| `CarreraCerrada` (inicio de la carrera; estado `CERRADA_EN_CURSO`) | Core – Carreras | Kafka `carreras.eventos` | Apuestas (marca la carrera como cerrada), Notificaciones ("comenzó la carrera"), Fraude (evalúa ráfagas previas al cierre), Data lake | `carrera_id` |
+| `CarreraCerrada` (hora de inicio programada; estado `CERRADA`) | Core – Carreras (programador, reloj del servidor) | Kafka `carreras.eventos` | Apuestas (marca la carrera como cerrada), Fraude (evalúa ráfagas previas al cierre), Data lake | `carrera_id` |
+| `CarreraIniciada` (el operador da la salida; estado `EN_CURSO`) | Core – Carreras | Kafka `carreras.eventos` | Notificaciones ("comenzó la carrera"), Data lake | `carrera_id` |
 | `ResultadoPublicado` (estado `FINALIZADA`) | Core – Carreras | Kafka `carreras.eventos` | **Liquidador** (dispara la liquidación), Core – Medianos (victorias, derrotas), Notificaciones ("terminó la carrera"), Auditoría, Data lake | `carrera_id` |
 | `ResultadoCorregido` | Core – Carreras | Kafka `carreras.eventos` | Liquidador (liquidación compensatoria), Core – Medianos, Notificaciones, Auditoría, Data lake | `carrera_id` |
 | `CarreraCancelada` | Core – Carreras | Kafka `carreras.eventos` | Liquidador (devoluciones), Apuestas (rechaza nuevas apuestas), Notificaciones, Auditoría, Data lake | `carrera_id` |
@@ -52,7 +53,7 @@
 ### Decisiones sobre la lista sugerida en el enunciado
 | Evento del enunciado | Decisión |
 |---|---|
-| `CarreraIniciada` | Se fusiona con **`CarreraCerrada`**: en este negocio, las apuestas se cierran exactamente al iniciar la carrera, así que ambos hechos ocurren a la vez. |
+| `CarreraIniciada` | Se mantiene, **separado de `CarreraCerrada`**. El cierre lo dispara el reloj del servidor a la hora programada; la salida real la da el operador y puede retrasarse (pista ocupada, mediano lesionado). Así se respeta el ciclo de vida del enunciado (`CERRADA` → `EN_CURSO`) y un retraso de la salida nunca reabre las apuestas. |
 | `CarreraFinalizada` | Se fusiona con **`ResultadoPublicado`**: una carrera finaliza oficialmente cuando se publica su resultado oficial. Dos eventos generarían estados intermedios sin utilidad. |
 | `PremioCalculado` | Se emite **un evento por carrera** (`LiquidacionCalculada`, con bolsa, comisión y factor), no uno por apuesta. El detalle por apuesta ya viaja en `PremioPagado`. Esto evita duplicar un millón de eventos. |
 | `ApuestaRealizada`, `ResultadoPublicado`, `PremioPagado`, `CarreraCancelada` | Se mantienen. |
@@ -65,6 +66,7 @@
 | `UsuarioBloqueado` | `usuario_id`, `motivo`, `bloqueado_por`, `at` |
 | `CarreraAbierta` | `carrera_id`, `abre_at`, `cierre_at`, `pista`, `distancia`, `participantes[]` (`mediano_id`) |
 | `CarreraCerrada` | `carrera_id`, `cerrada_at` |
+| `CarreraIniciada` | `carrera_id`, `iniciada_at`, `iniciada_por` |
 | `ResultadoPublicado` | `carrera_id`, `version_resultado`, `ganador_mediano_id`, `posiciones[]`, `publicado_por`, `aprobado_por`, `at` |
 | `ResultadoCorregido` | Lo mismo que `ResultadoPublicado`, más `version_anterior`, `motivo` |
 | `CarreraCancelada` | `carrera_id`, `motivo`, `cancelada_por`, `at` |

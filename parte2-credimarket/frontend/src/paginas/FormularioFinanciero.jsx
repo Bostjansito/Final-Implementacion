@@ -21,13 +21,15 @@ export function aNumeros(form) {
   return salida;
 }
 
-export default function FormularioFinanciero({ valores, onChange }) {
+// "bloqueados": campos que el usuario no puede cambiar (en el perfil del cliente, los ya registrados).
+export default function FormularioFinanciero({ valores, onChange, bloqueados = [] }) {
   return (
     <fieldset className="grupo">
       <legend>Información financiera y laboral</legend>
       <div className="rejilla-2">
         <Campo etiqueta="Tipo de empleo">
-          <select value={valores.tipo_empleo || ""} onChange={(e) => onChange("tipo_empleo", e.target.value)}>
+          <select value={valores.tipo_empleo || ""} disabled={bloqueados.includes("tipo_empleo")}
+                  onChange={(e) => onChange("tipo_empleo", e.target.value)}>
             <option value="">Sin especificar</option>
             <option value="dependiente">Dependiente</option>
             <option value="independiente">Independiente</option>
@@ -37,6 +39,7 @@ export default function FormularioFinanciero({ valores, onChange }) {
         {CAMPOS_FINANCIEROS.map((c) => (
           <Campo key={c.k} etiqueta={c.e + (c.req ? " *" : "")} ayuda={c.ayuda}>
             <input type="number" min={c.min} max={c.max} step={c.entero ? 1 : "any"} required={c.req}
+                   disabled={bloqueados.includes(c.k)}
                    value={valores[c.k] ?? ""} onChange={(e) => onChange(c.k, e.target.value)} />
           </Campo>
         ))}

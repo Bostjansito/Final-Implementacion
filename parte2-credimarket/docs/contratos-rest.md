@@ -11,7 +11,7 @@ Autenticación: `Authorization: Bearer <JWT>`. Roles: **P** = público, **C** = 
 | `GET /auth/me` | C/A | Datos del token. |
 | `GET /clientes?buscar=&pagina=&tamano=` | A | Listado paginado. |
 | `GET /clientes/{id}` | C (propio) / A | Ficha completa. 403 si es de otro cliente. |
-| `PUT /clientes/{id}` | C (propio) / A | Nombre, teléfono, datos financieros y laborales. `activo` solo para admin. |
+| `PUT /clientes/{id}` | C (propio) / A | Nombre y teléfono. El cliente solo puede **completar** datos financieros vacíos; reescribir los ya registrados responde **403** (solo admin o importación CSV). `activo` solo para admin. |
 | `POST /clientes/importar` (multipart `archivo`) | A | Importación CSV → `{filas, insertados, actualizados, sin_cambios, rechazados, errores[{fila, codigo_externo, error}]}` |
 | `GET /clientes/importaciones` | A | Historial de importaciones (archivo, SHA-256, conteos). |
 | `GET /internal/clientes/{id}` | S/A | Perfil para la evaluación de riesgo. |

@@ -1,6 +1,6 @@
 """Importación masiva de clientes por CSV.
 
-Política (documentada en docs/clientes-importacion.md):
+Política (documentada en docs/idempotencia-y-seguridad.md):
 * Clave externa única: ``codigo_externo`` (acepta también la columna ``cliente_id``
   del histórico entregado).
 * Si el código no existe -> se inserta.

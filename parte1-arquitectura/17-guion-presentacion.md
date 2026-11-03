@@ -11,7 +11,7 @@
 | 5 | Decisión 2: servicios y responsabilidades | Mapa capacidad → componente. Criterio de extracción. Por qué Medianos no es un servicio. | 03 |
 | 6 | Diagrama general | Diagrama con líneas sólidas (síncrono) y punteadas (asíncrono), zona pública y privada. | 04 |
 | 7 | Decisión 3: comunicación síncrona | Tabla resumida (S1, S2, S4, S6) + timeouts y *fallbacks*. "Lo que deliberadamente NO es síncrono". | 05 |
-| 8 | Decisión 4: eventos | Tabla de eventos principales con clave de partición. Eventos fusionados (`CarreraIniciada`, `CarreraFinalizada`). | 06 |
+| 8 | Decisión 4: eventos | Tabla de eventos principales con clave de partición. Evento fusionado (`CarreraFinalizada` → `ResultadoPublicado`); `CarreraCerrada` y `CarreraIniciada` separados para respetar los estados `CERRADA` → `EN_CURSO`. | 06 |
 | 9 | Decisión 5: Kafka + RabbitMQ | "Kafka recuerda lo que pasó; RabbitMQ reparte lo que hay que hacer". Por qué no uno solo. | 07, ADR‑002 |
 | 10 | Diseño de Kafka | Topics, particiones, claves, grupos de consumidores, outbox + Debezium. | 07 |
 | 11 | Diseño de RabbitMQ | Exchange → colas → *workers*, reintentos con TTL, DLQ, KEDA. | 07 |

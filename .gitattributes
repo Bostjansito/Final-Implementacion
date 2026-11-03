@@ -1,0 +1,5 @@
+# Normaliza finales de línea en todo el repositorio (Windows, macOS y Linux).
+* text=auto
+# Los CSV del modelo se identifican por su SHA-256: SIEMPRE con LF, también en Windows.
+*.csv text eol=lf
+*.sh text eol=lf
