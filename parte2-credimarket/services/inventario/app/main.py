@@ -79,7 +79,8 @@ def entrada(datos: Entrada, s: Session = Depends(sesion), p: Principal = Depends
         raise HTTPException(503, "No fue posible verificar el producto (servicio Productos no disponible)") from None
     if r.status_code == 404:
         raise HTTPException(404, "El producto no existe")
-    r.raise_for_status()
+    if r.status_code >= 400:
+        raise HTTPException(502, f"Productos respondió HTTP {r.status_code} al verificar el producto")
     with s.begin():
         e = logica.registrar_entrada(s, datos.producto_id, datos.cantidad, datos.nota, p.email or p.sub)
     return {"producto_id": e.producto_id, "disponible": e.disponible, "reservado": e.reservado}

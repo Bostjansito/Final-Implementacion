@@ -174,7 +174,10 @@ def caso5():
         h.start()
     for h in hilos:
         h.join()
-    ids = {r[1]["id"] for r in respuestas if r[0] in (200, 201, 202)}
+    codigos = [r[0] for r in respuestas]
+    verificar(all(c in (200, 201, 202) for c in codigos),
+              f"todas las peticiones repetidas debían responder 2xx, respondieron {codigos}")
+    ids = {r[1]["id"] for r in respuestas}
     verificar(len(ids) == 1, f"5 peticiones con la misma clave generaron {len(ids)} préstamos: {[r[0] for r in respuestas]}")
     pid = ids.pop()
     st, r, _ = solicitar(T_ANA, prod, cantidad=2, idem=k)
@@ -379,7 +382,12 @@ def caso13():
     verificar(st4 == 403, f"cliente creando productos: {st4}")
     st5, _, _ = pedir("GET", "clientes", "/internal/clientes/" + p["cliente_id"], T_CARLA)
     verificar(st5 == 403, f"endpoint interno: {st5}")
-    return "403 en consulta, cancelación, datos de cliente, administración y endpoint interno"
+    _, yo, _ = pedir("GET", "clientes", "/auth/me", T_CARLA)
+    st6, _, _ = pedir("PUT", "clientes", f"/clientes/{yo['cliente_id']}", T_CARLA,
+                      {"ingresos_mensuales_cop": 50_000_000})
+    verificar(st6 == 403, f"cliente reescribiendo sus propios ingresos: {st6}")
+    return ("403 en consulta, cancelación, datos de cliente, administración, endpoint interno "
+            "y reescritura de datos financieros propios")
 
 
 @caso("16", "Entradas inválidas y token inválido devuelven errores claros")

@@ -16,7 +16,7 @@ from credimarket_common.db import bd_lista, crear_engine, crear_sesiones, espera
 from credimarket_common.web import configurar_cors, configurar_logging
 
 from .importacion import importar
-from .modelos import Base, Cliente, Importacion, Usuario
+from .modelos import CAMPOS_FINANCIEROS, Base, Cliente, Importacion, Usuario
 from .seguridad import hash_password, verificar_password
 
 configurar_logging("clientes")
@@ -223,6 +223,15 @@ def actualizar(cliente_id: str, cambios: ActualizacionCliente, s: Session = Depe
         c = s.get(Cliente, cliente_id, with_for_update=True)
         if c is None:
             raise HTTPException(404, "Cliente no encontrado")
+        if not p.es_admin:
+            # Política de "datos permitidos": el cliente edita sus datos de contacto y puede COMPLETAR
+            # datos financieros que falten, pero no reescribir los ya registrados (son la base de la
+            # evaluación de riesgo; si cambian, los actualiza un administrador o la importación CSV).
+            bloqueados = sorted(k for k, v in valores.items()
+                                if k in CAMPOS_FINANCIEROS and getattr(c, k) is not None and getattr(c, k) != v)
+            if bloqueados:
+                raise HTTPException(403, "Los datos financieros ya registrados solo los puede modificar un "
+                                         f"administrador: {', '.join(bloqueados)}")
         for campo, valor in valores.items():
             setattr(c, campo, valor)
     return c.a_dict()

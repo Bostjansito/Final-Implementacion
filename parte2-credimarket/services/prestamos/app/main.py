@@ -116,6 +116,10 @@ def solicitar(datos: SolicitudPrestamo, s: Session = Depends(sesion), p: Princip
         s.rollback()
         existente = s.scalar(select(Prestamo).where(Prestamo.usuario_id == p.sub,
                                                     Prestamo.idempotency_key == idempotency_key))
+        # La consulta abrió una transacción implícita (autobegin). Se cierra aquí para que el
+        # "with s.begin()" del paso 5 no falle al reanudar una solicitud que sigue en EVALUANDO.
+        # commit (y no rollback) porque expire_on_commit=False conserva los atributos cargados.
+        s.commit()
         if existente is None:
             raise HTTPException(409, "Conflicto de concurrencia; reintente") from None
         if existente.request_hash != huella:

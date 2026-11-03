@@ -40,6 +40,9 @@ RK_RESERVAR = "inventario.reservar"
 RK_LIBERAR = "inventario.liberar"
 
 MAX_REINTENTOS = entero("MAX_REINTENTOS", 3)
+# Intentos de publicación de un mensaje del outbox que el broker devuelve como no enrutable.
+# Al agotarlos, el mensaje queda en el outbox (publicado_at NULL) para revisión manual.
+MAX_INTENTOS_PUBLICACION = entero("MAX_INTENTOS_PUBLICACION", 10)
 RETRY_TTL_MS = entero("RETRY_TTL_MS", 5000)
 
 
@@ -139,23 +142,38 @@ class RelayOutbox:
             filas = s.execute(
                 select(self.outbox.c.id, self.outbox.c.exchange, self.outbox.c.routing_key,
                        self.outbox.c.mensaje)
-                .where(self.outbox.c.publicado_at.is_(None))
+                .where(self.outbox.c.publicado_at.is_(None),
+                       self.outbox.c.intentos < MAX_INTENTOS_PUBLICACION)
                 .order_by(self.outbox.c.id).limit(self.lote).with_for_update(skip_locked=True)
             ).all()
             for fila in filas:
                 m = fila.mensaje
-                canal.basic_publish(
-                    exchange=fila.exchange, routing_key=fila.routing_key,
-                    body=json.dumps(m).encode(), mandatory=True,
-                    properties=pika.BasicProperties(
-                        delivery_mode=pika.DeliveryMode.Persistent, content_type="application/json",
-                        message_id=m["event_id"], type=m["type"], correlation_id=m["correlation_id"],
-                        headers={"schema_version": m["schema_version"]},
-                    ),
-                )  # con confirm_delivery, retorna solo cuando el broker confirmó
+                try:
+                    self._publicar_fila(canal, fila, m)
+                except UnroutableError:
+                    # Ninguna cola lo recibe (error permanente): se cuenta el intento y se sigue con el
+                    # resto, para que un solo mensaje no bloquee el outbox. NackError sí se propaga
+                    # (es transitorio) y todo el lote se reintenta.
+                    log.error("Mensaje %s (%s) no enrutable hacia %s/%s", m["event_id"], m["type"],
+                              fila.exchange, fila.routing_key)
+                    s.execute(update(self.outbox).where(self.outbox.c.id == fila.id)
+                              .values(intentos=self.outbox.c.intentos + 1))
+                    continue
                 s.execute(update(self.outbox).where(self.outbox.c.id == fila.id)
                           .values(publicado_at=func.now(), intentos=self.outbox.c.intentos + 1))
             return len(filas)
+
+    @staticmethod
+    def _publicar_fila(canal, fila, m: dict) -> None:
+        canal.basic_publish(
+            exchange=fila.exchange, routing_key=fila.routing_key,
+            body=json.dumps(m).encode(), mandatory=True,
+            properties=pika.BasicProperties(
+                delivery_mode=pika.DeliveryMode.Persistent, content_type="application/json",
+                message_id=m["event_id"], type=m["type"], correlation_id=m["correlation_id"],
+                headers={"schema_version": m["schema_version"]},
+            ),
+        )  # con confirm_delivery, retorna solo cuando el broker confirmó
 
     def ejecutar(self, detener: threading.Event) -> None:
         while not detener.is_set():
@@ -168,7 +186,7 @@ class RelayOutbox:
                 while not detener.is_set():
                     if self._ciclo(canal) == 0:
                         conexion.sleep(0.5)
-            except (UnroutableError, NackError) as exc:
+            except NackError as exc:
                 log.error("El broker no confirmó una publicación, se reintentará: %s", exc)
                 time.sleep(2)
             except AMQPError as exc:
@@ -248,6 +266,7 @@ class Consumidor:
 
     @staticmethod
     def _publicar(canal, exchange: str, rk: str, cuerpo: bytes, props, headers: dict) -> None:
+        """Con confirm_delivery retorna solo cuando el broker confirmó; el ack del original va después."""
         canal.basic_publish(exchange, rk, cuerpo, properties=pika.BasicProperties(
             delivery_mode=pika.DeliveryMode.Persistent, content_type="application/json",
             message_id=props.message_id, type=props.type, correlation_id=props.correlation_id,
@@ -260,6 +279,9 @@ class Consumidor:
                 conexion = conectar(f"{self.nombre}-consumidor")
                 canal = conexion.channel()
                 declarar_topologia(canal)
+                # Los reenvíos a <cola>.retry y a la DLQ también esperan confirmación del broker:
+                # si no se confirman, se lanza una excepción, no se hace ack y RabbitMQ reentrega el original.
+                canal.confirm_delivery()
                 canal.basic_qos(prefetch_count=self.prefetch)
                 canal.basic_consume(self.cola, self._al_recibir, auto_ack=False)
                 log.info("Consumiendo la cola %s", self.cola)
