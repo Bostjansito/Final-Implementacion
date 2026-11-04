@@ -34,7 +34,7 @@ flowchart LR
         RMQ[["RabbitMQ<br/>(colas de trabajo)"]]
 
         DBCORE[("PostgreSQL Core<br/>esquemas por módulo")]
-        DBAPU[("PostgreSQL Apuestas<br/>particionada por carrera<br/>+ réplica de lectura")]
+        DBAPU[("PostgreSQL Apuestas<br/>particionada por mes<br/>+ réplica de lectura")]
         DBWAL[("PostgreSQL Billetera<br/>Multi-AZ, PITR")]
         REDIS[("Redis<br/>estado de carreras,<br/>cuotas, bloqueados")]
         LAKE[("Data lake S3 / Parquet<br/>+ motor SQL")]
@@ -63,7 +63,7 @@ flowchart LR
     CORE -.->|"CarreraAbierta / Cerrada /<br/>ResultadoPublicado / Cancelada"| KAFKA
     AAPI -.->|"ApuestaRealizada<br/>(outbox)"| KAFKA
     WAL -.->|"MovimientoRegistrado<br/>(outbox)"| KAFKA
-    ALIQ -.->|"PremioCalculado / PremioPagado"| KAFKA
+    ALIQ -.->|"LiquidacionCalculada / PremioPagado"| KAFKA
     KAFKA -.-> APU
     KAFKA -.-> NOT
     KAFKA -.-> AUD
